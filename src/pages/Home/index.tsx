@@ -1,7 +1,5 @@
-/* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {View} from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import React, {useEffect, useState} from 'react';
+import MyObject, {MyObjectProps} from '../../components/MyObject/index';
 import {
   Container,
   Header,
@@ -12,50 +10,20 @@ import {
   CategoriesWrapper,
   CategoryWrapper,
   List,
-  ObjectWrapper,
-  ObjectConteiner,
-  Photo,
-  Content,
-  ObjectName,
-  ObjectRoom,
-  BlankSpace,
-  InlineStyles,
   HeaderContent,
 } from './styles';
-
-export interface MyObject {
-  id: number;
-  photo?: string;
-  name: string;
-  type: {
-    id: number;
-    name: string;
-  };
-  room: string;
-  furniture?: string;
-  drawer?: string;
-  obs?: string;
-}
+import getRealm from '../../services/realm';
 
 const Home: React.FC = () => {
-  const renderItem = ({item}: {item: MyObject}) => {
-    return (
-      <ObjectWrapper>
-        <ObjectConteiner style={InlineStyles.ObjectConteiner}>
-          <Content>
-            {/* {item.photo ? <Photo source={item.photo}/> : 
-            } */}
-            <BlankSpace />
-            <View>
-              <ObjectName>{item.name}</ObjectName>
-              <ObjectRoom>{item.room}</ObjectRoom>
-            </View>
-          </Content>
-          <AntDesign name="right" size={14} color="black" />
-        </ObjectConteiner>
-      </ObjectWrapper>
-    );
-  };
+  const [myObjects, setMyObjects] = useState<any>([]);
+  useEffect(() => {
+    (async () => {
+      const realm = await getRealm();
+      const data = realm.objects('MyObject').sorted('name', true);
+      setMyObjects(data);
+      console.log(data);
+    })();
+  }, []);
 
   const ListHeaderComponent = () => {
     return (
@@ -94,115 +62,10 @@ const Home: React.FC = () => {
     // <Container>
     <List
       ListHeaderComponent={ListHeaderComponent}
-      data={[
-        {
-          id: 1,
-          // photo: File;
-          name: 'Object',
-          // type: {
-          //   id: number;
-          //   name: string;
-          // }
-          room: "Sala",
-          furniture: 'Sla',
-          drawer: 'Segunda',
-          obs: 'Debaixo de sla oq',
-        },
-        {
-          id: 2,
-          // photo: File;
-          name: 'Object',
-          // type: {
-          //   id: number;
-          //   name: string;
-          // }
-          room: "Sala",
-          furniture: 'Sla',
-          drawer: 'Segunda',
-          obs: 'Debaixo de sla oq',
-        },
-        {
-          id: 3,
-          // photo: File;
-          name: 'Object',
-          // type: {
-          //   id: number;
-          //   name: string;
-          // }
-          room: "Sala",
-          furniture: 'Sla',
-          drawer: 'Segunda',
-          obs: 'Debaixo de sla oq',
-        },
-        {
-          id: 4,
-          // photo: File;
-          name: 'Object',
-          // type: {
-          //   id: number;
-          //   name: string;
-          // }
-          room: "Sala",
-          furniture: 'Sla',
-          drawer: 'Segunda',
-          obs: 'Debaixo de sla oq',
-        },
-        {
-          id: 5,
-          // photo: File;
-          name: 'Object',
-          // type: {
-          //   id: number;
-          //   name: string;
-          // }
-          room: "Sala",
-          furniture: 'Sla',
-          drawer: 'Segunda',
-          obs: 'Debaixo de sla oq',
-        },
-        {
-          id: 6,
-          // photo: File;
-          name: 'Object',
-          // type: {
-          //   id: number;
-          //   name: string;
-          // }
-          room: "Sala",
-          furniture: 'Sla',
-          drawer: 'Segunda',
-          obs: 'Debaixo de sla oq',
-        },
-        {
-          id: 7,
-          // photo: File;
-          name: 'Object',
-          // type: {
-          //   id: number;
-          //   name: string;
-          // }
-          room: "Sala",
-          furniture: 'Sla',
-          drawer: 'Segunda',
-          obs: 'Debaixo de sla oq',
-        },
-        {
-          id: 8,
-          // photo: File;
-          name: 'Object',
-          // type: {
-          //   id: number;
-          //   name: string;
-          // }
-          room: "Sala",
-          furniture: 'Sla',
-          drawer: 'Segunda',
-          obs: 'Debaixo de sla oq',
-        },
-      ]}
+      data={myObjects}
       showsVerticalScrollIndicator={false}
-      renderItem={renderItem}
-      keyExtractor={(item: MyObject) => item.id}
+      renderItem={({item}: {item: MyObjectProps}) => <MyObject data={item} />}
+      keyExtractor={(item: MyObjectProps) => item.id.toString()}
     />
     // </Container>
   );

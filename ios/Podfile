@@ -14,6 +14,10 @@ target 'Lembrarme' do
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+
+  pod 'RealmJS', :path => '../node_modules/realm'
+
   target 'LembrarmeTests' do
     inherit! :complete
     # Pods for testing

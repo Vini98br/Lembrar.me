@@ -1,30 +1,41 @@
 import {useState, useEffect} from 'react';
+import {Keyboard} from 'react-native';
 import {
   NativeSyntheticEvent,
-  Button,
   TextInputSubmitEditingEventData,
   GestureResponderEvent,
 } from 'react-native';
 import {FormData} from '../pages/NewObject/index';
 
-const useForm = (
-  callback: () => void,
-  validate: (values: FormData) => any
-) => {
-  const [values, setValues] = useState<any>({});
+function useForm<T>(
+  callback: (values: T) => Promise<any>,
+  validate: (values: T) => any,
+  initialState: any,
+) {
+  const [values, setValues] = useState<T>(initialState);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    // if (Object.keys(errors).length === 0 && isSubmitting) {
-      callback();
-    // }
+    (async () => {
+      console.log('veio2')
+      try {
+        if (Object.keys(errors).length === 0 && isSubmitting) {
+          console.log('veio3')
+          await callback(values);
+          Keyboard.dismiss();
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    })();
   }, [errors]);
 
   const handleSubmit = (event: GestureResponderEvent) => {
     if (event) event.preventDefault();
+    setErrors({});
+    console.log('veio')
     // setErrors(validate(values!));
-    console.log(values)
     setIsSubmitting(true);
   };
 
@@ -41,6 +52,6 @@ const useForm = (
     values,
     errors,
   };
-};
+}
 
 export default useForm;

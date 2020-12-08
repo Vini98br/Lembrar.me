@@ -2,21 +2,20 @@ import React, {useState} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
-import {TouchableOpacity, ScrollView} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import {
   Container,
   Header,
   CloseButton,
   CloseButtonWrapper,
-  StyledInput,
-  StyledItem,
   styles,
-  SubmitButton,
   SubmitButtonText,
   StyledForm,
 } from './styles';
 import FormItem from '../../components/FormItem';
 import useForm from '../../hooks/useForm';
+import getRealm from '../../services/realm';
+import {MyObjectProps} from '../../components/MyObject';
 
 export interface InputFocus {
   name?: boolean;
@@ -41,11 +40,21 @@ const NewObject: React.FC = () => {
     console.log();
   };
 
-  const add = () => {
-    console.log();
+  const addObject = async (data: MyObjectProps) => {
+    const realm = await getRealm();
+    realm.write(() => {
+      let id: any = realm.objects('MyObject').max('id');
+      data.id = id === undefined ? 1 : id++;
+      console.log(data)
+      realm.create('MyObject', data);
+    });
   };
 
-  const {values, handleChange, handleSubmit} = useForm(add, validate);
+  const {values, handleChange, handleSubmit} = useForm<MyObjectProps>(
+    addObject,
+    validate,
+    {},
+  );
 
   return (
     <Container showsVerticalScrollIndicator={false}>

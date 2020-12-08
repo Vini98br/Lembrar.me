@@ -27,7 +27,6 @@ const icons = {
 
 export interface RoutesProps {
   navigatorRef: React.MutableRefObject<NavigationContainerRef | null>;
-
 }
 
 const Routes: React.FC<RoutesProps> = ({navigatorRef}) => {
@@ -35,8 +34,8 @@ const Routes: React.FC<RoutesProps> = ({navigatorRef}) => {
     <Navigator
       initialRouteName="Home"
       tabBarOptions={{
-        activeTintColor: 'gray',
-        inactiveTintColor: 'blue',
+        activeTintColor: '#8900F2',
+        inactiveTintColor: 'gray',
       }}
       screenOptions={({route, navigation}) => ({
         tabBarVisible: !(

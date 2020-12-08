@@ -13,8 +13,8 @@ const App: React.FC = () => {
   const routeNameRef = React.useRef<NavigationContainerRef | null>(null);
   return (
     <>
-      <StatusBar barStyle="light-content" />
-      <NavigationContainer ref={routeNameRef!}>
+      <StatusBar barStyle="light-content" translucent />
+      <NavigationContainer ref={routeNameRef}>
         <ThemeProvider theme={myTheme}>
           <Routes navigatorRef={routeNameRef} />
         </ThemeProvider>
